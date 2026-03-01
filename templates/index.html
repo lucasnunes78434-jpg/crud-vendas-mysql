@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERP de vendas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- MENU LATERAL -->
+    <div class="sidebar">
+        <h2>ERP de vendas</h2>
+
+        <a href="/clientes">Clientes</a>
+        <a href="/produtos">Produtos</a>
+        <a href="/pedidos">Pedidos</a>
+    </div>
+
+    <!-- CONTEÚDO -->
+    <div class="content">
+        {% if view == "clientes" %}
+            <h2>Clientes</h2>
+
+            <div class="top-actions">
+                <a href="/Novocliente" class="btn-add">+ Novo cliente</a>
+            </div>
+
+            {% for cliente in clientes %}
+                <div class="card">
+
+                    <h3>{{ cliente.nome }}</h3>
+
+                    <p>Email: {{ cliente.email }}</p>
+                    <p>Telefone: {{ cliente.telefone }}</p>
+
+                    <div class="card-actions">
+                        <a href="/clientes/edit/{{ cliente.id }}" class="btn-edit">Editar</a>
+                        <a href="/clientes/delete/{{ cliente.id }}" class="btn-delete">Excluir</a>
+                    </div>
+
+                </div>
+            {% endfor %}
+
+        {% elif view == "novocliente" %}
+          <h2>Novo cliente</h2>
+
+            <div class="form-card">
+                <form method="POST" action="/Novocliente">
+
+                    <label>Nome</label><br>
+                    <input type="text" name="nome" required><br><br>
+
+                    <label>Email</label><br>
+                    <input type="email" name="email" required><br><br>
+
+                    <label>Telefone</label><br>
+                    <input type="text" name="telefone" required><br><br>
+
+                    <button type="submit">Salvar</button>
+
+                </form>
+            </div>
+
+
+        {% elif view == "editcliente" %}
+        <h2>Editar cliente</h2>
+
+        <div class="form-card">
+            <form method="POST" action="/clientes/edit/{{ cliente.id }}">
+
+                <label>Nome</label><br>
+                <input type="text" name="nome" value="{{ cliente.nome }}" required><br><br>
+
+                <label>Email</label><br>
+                <input type="email" name="email" value="{{ cliente.email }}" required><br><br>
+
+                <label>Telefone</label><br>
+                <input type="text" name="telefone" value="{{ cliente.telefone }}" required><br><br>
+
+                <button type="submit">Salvar</button>
+
+            </form>
+        </div>
+
+        {% elif view == "produtos" %}
+            <h2>Produtos</h2>
+
+            <div class="top-actions">
+                <a href="/Novoproduto" class="btn-add">+ Novo produto</a>
+            </div>
+
+
+            {% for produto in produtos %}
+                <div class="card">
+
+                    <h3>{{ produto.nome }}</h3>
+
+                    <p>Preço: R$ {{ produto.preco }}</p>
+                    <p>Estoque: {{ produto.estoque }}</p>
+
+                    <div class="card-actions">
+                        <a href="/produtos/edit/{{ produto.id }}" class="btn-edit">Editar</a>
+                        <a href="/produtos/delete/{{ produto.id }}" class="btn-delete">Excluir</a>
+                    </div>
+
+                </div>
+       {% endfor %}
+
+       {% elif view == "novoproduto" %}
+            <h2>Novo produto</h2>
+
+            <div class="form-card">
+                <form method="POST" action="/Novoproduto">
+
+                    <label>Nome</label><br>
+                    <input type="text" name="nome" required><br><br>
+
+                    <label>Preço</label><br>
+                    <input type="number" step="0.01" name="preco" required><br><br>
+
+                    <label>Estoque</label><br>
+                    <input type="number" name="estoque" required><br><br>
+
+                    <button type="submit">Salvar</button>
+
+                </form>
+            </div>
+
+       {% elif view == "editproduto" %}
+        <h2>Editar produto</h2>
+
+        <div class="form-card">
+            <form method="POST" action="/produtos/edit/{{ produto.id }}">
+
+                <label>Nome</label><br>
+                <input type="text" name="nome" value="{{ produto.nome }}" required><br><br>
+
+                <label>Preço</label><br>
+                <input type="number" step="0.01" name="preco" value="{{ produto.preco }}" required><br><br>
+
+                <label>Estoque</label><br>
+                <input type="number" name="estoque" value="{{ produto.estoque }}" required><br><br>
+
+                <button type="submit">Salvar</button>
+
+            </form>
+        </div>
+
+        {% elif view == "pedidos" %}
+            <h2>Pedidos</h2>
+
+            <div class="top-actions">
+                <a href="/pedido/novo" class="btn-add">+ Novo pedido</a>
+            </div>
+
+            {% for pedido in pedidos %}
+                <div class="card">
+
+                    <a href="/pedido/{{ pedido.id }}">
+                        <h3>Pedido #{{ pedido.id }}</h3>
+                    </a>
+
+                    <p>Cliente: {{ pedido.cliente }}</p>
+                    <p>Data: {{ pedido.data_pedido }}</p>
+                    <p>Total: R$ {{ pedido.total }}</p>
+
+                    <div class="card-actions">
+                        <a href="/pedido/{{ pedido.id }}" class="btn-edit">Abrir</a>
+                        <a href="/pedido/delete/{{ pedido.id }}" class="btn-delete">Excluir</a>
+                    </div>
+
+                </div>
+
+            {% endfor %}
+                
+            {% elif view == "novo_pedido" %}
+                <h2>Novo pedido</h2>
+
+                <div class="form-card">
+                    <form method="POST" action="/pedido/criar">
+
+                        <label>Cliente</label><br>
+                         <select name="cliente_id" required>
+                             {% for c in clientes %}
+                                 <option value="{{ c.id }}">{{ c.nome }}</option>
+                            {% endfor %}
+                         </select><br><br>
+
+                        <button type="submit">Criar pedido</button>
+
+                    </form>
+                </div>
+
+            {% elif view == "pedido" %}
+                <h2>Pedido #{{ pedido.id }}</h2>
+
+                <p>Cliente: {{ pedido.cliente }}</p>
+                <p>Data: {{ pedido.data_pedido }}</p>
+                <p>Total: R$ {{ pedido.total }}</p>
+
+                <div class="top-actions">
+                    <form method="POST" action="/pedido/{{ pedido.id }}/add">
+                        <select name="produto_id" required>
+                            {% for p in produtos %}
+                                <option value="{{ p.id }}">{{ p.nome }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <input type="number" name="quantidade" value="1" min="1" required>
+
+                        <button type="submit" class="btn-add">Adicionar produto</button>
+                    </form>
+                </div>
+
+                <h3>Itens</h3>
+
+                {% for item in itens %}
+                    <div class="card">
+                        <p><strong>{{ item.nome }}</strong></p>
+                        <p>Qtd: {{ item.quantidade }}</p>
+                        <p>Preço: R$ {{ item.preco_unitario }}</p>
+
+                        <div class="card-actions">
+                            <a href="/pedido/item/delete/{{ item.id }}/{{ pedido.id }}" class="btn-delete">
+                                Excluir
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+
+               
+
+        {% else %}
+            <h2>Bem-vindo</h2>
+            <p>Selecione um módulo ao lado</p>
+        {% endif %}
+    </div>
+
+</div>
+
+</body>
+</html>
