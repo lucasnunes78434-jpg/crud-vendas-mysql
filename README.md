@@ -1,6 +1,6 @@
 # 📦 CRUD de Pedidos com MySQL
 
-Sistema CRUD de gestão de pedidos desenvolvido em **Python + MySQL**, simulando funcionalidades básicas de um ERP comercial: cadastro de clientes, produtos e registro de pedidos com relacionamento entre entidades.
+Sistema CRUD de vendas desenvolvido em **Python + MySQL**, simulando funcionalidades básicas de um ERP comercial: cadastro de clientes, produtos e registro de pedidos com relacionamento entre entidades.
 
 ---
 
